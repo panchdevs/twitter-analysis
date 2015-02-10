@@ -14,7 +14,7 @@ Environment Setup
 2. Clone this repository  
 `git clone https://github.com/panchdevs/twitter-analysis.git`
 3. Get your api keys from Twitter ([HOWTO](http://www.74by2.com/2014/06/easily-g    et-twitter-api-key-api-secret-access-token-access-secret-pictures/))
-4. Enter your keys in `tweet_collector.py` and change the location of the mongodb server if required
+4. Enter your keys in `tweet_collector.py` and edit the mongodb server host and port if required
 
 How to run
 ----------
