@@ -1,9 +1,7 @@
-import pymongo
-
 from tweepy.streaming import StreamListener
 
 class TweetCollector(StreamListener):
-    def __init__(self, collection, limit = None, api = None):
+    def __init__(self, collection, limit=None, api=None):
         super(TweetCollector, self).__init__()
         self.count = 0
         self.limit = limit
