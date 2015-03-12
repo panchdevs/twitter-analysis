@@ -1,4 +1,5 @@
 from tweepy.streaming import StreamListener
+from tweetcleaner import process_tweet
 
 class TweetCollector(StreamListener):
     def __init__(self, collection, limit=None, api=None):
@@ -8,6 +9,9 @@ class TweetCollector(StreamListener):
         self.collection = collection
 
     def on_status(self, tweet):
+        cleantweet = tweet._json['text']
+        cleantweet = process_tweet(cleantweet)
+        tweet._json['cleantweet'] = cleantweet
         self.collection.insert(tweet._json)
         self.count += 1
         if self.count % 10 == 0:
