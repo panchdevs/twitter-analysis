@@ -1,5 +1,6 @@
 from tweepy.streaming import StreamListener
 from tweetcleaner import process_tweet
+from tweet_sentiment import algorithm
 
 class TweetCollector(StreamListener):
     def __init__(self, collection, limit=None, api=None):
@@ -12,6 +13,8 @@ class TweetCollector(StreamListener):
         cleantweet = tweet._json['text']
         cleantweet = process_tweet(cleantweet)
         tweet._json['cleantweet'] = cleantweet
+        score=algorithm(cleantweet)
+        tweet._json['score']=score
         self.collection.insert(tweet._json)
         self.count += 1
         if self.count % 10 == 0:
@@ -19,7 +22,7 @@ class TweetCollector(StreamListener):
 
         # If limit is reached return False to stop collecting tweets
         # Else if no limit specified or limit not reached return True to
-        # collect more tweets
+        # collect more tweetsNN-111.txt file, you may find it useful to build a dictionary. Note that the AFINN-111.txt file format is tab-delimited, meaning that the term and the score are separated by
         return not self.limit_reached()
 
     def on_error(self, status):

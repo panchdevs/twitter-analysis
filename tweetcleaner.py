@@ -42,13 +42,13 @@ def process_emoticons(tweet):
             tweetlist[i] = "POSITIVE2 EMOTICON"
 
         if tweetlist[i] in NEG1:
-	    tweetlist[i] = "NEGATIVE1 EMOTICON"
+           tweetlist[i] = "NEGATIVE1 EMOTICON"
 
-	if tweetlist[i] in NEG2:
-	    tweetlist[i] = "NEGATIVE2 EMOTICON"
+    if tweetlist[i] in NEG2:
+        tweetlist[i] = "NEGATIVE2 EMOTICON"
 
-	if tweetlist[i] in NEU:
-	    tweetlist[i] = "NEUTRAL EMOTICON"
-		
+    if tweetlist[i] in NEU:
+        tweetlist[i] = "NEUTRAL EMOTICON"
+    
     tw = " ".join(tweetlist)
     return tw
