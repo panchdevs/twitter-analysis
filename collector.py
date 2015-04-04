@@ -1,5 +1,6 @@
 from tweepy.streaming import StreamListener
 from tweetcleaner import process_tweet
+from tweet_sentiment import calculate_sentiment_score
 
 class TweetCollector(StreamListener):
     def __init__(self, collection, limit=None, api=None):
@@ -12,6 +13,8 @@ class TweetCollector(StreamListener):
         cleantweet = tweet._json['text']
         cleantweet = process_tweet(cleantweet)
         tweet._json['cleantweet'] = cleantweet
+        score = calculate_sentiment_score(cleantweet)
+        tweet._json['score'] = score
         self.collection.insert(tweet._json)
         self.count += 1
         if self.count % 10 == 0:
