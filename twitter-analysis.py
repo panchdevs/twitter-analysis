@@ -1,10 +1,14 @@
-from bottle import request, route, run, template, view
+from bottle import Bottle, request, route, run, template, view
 
-@route('/')
+app=Bottle()
+app.config.load_config('config.conf')
+
+
+@app.route('/')
 def index():
     return template('index')
 
-@route('/sentiment')
+@app.route('/sentiment')
 @view('analysis')
 def analysis():
     data = {}
