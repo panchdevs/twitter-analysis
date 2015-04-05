@@ -1,6 +1,6 @@
 from bottle import Bottle, request, route, run, template, view
 
-app=Bottle()
+app = Bottle()
 app.config.load_config('config.conf')
 
 
