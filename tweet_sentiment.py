@@ -1,5 +1,10 @@
 import re
 
+def get_features(tweet):
+	sentiment_score = calculate_sentiment_score(tweet)
+	no_of_pos, no_of_neg = calculate_emoticon_score(tweet)
+	return [sentiment_score, no_of_pos, no_of_neg]
+
 def calculate_sentiment_score(tweet):
 	d = {}
 	fl = open("words.txt", 'r')

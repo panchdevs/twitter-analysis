@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    <p>Welcome to <%= title %></p>
+    <form action="/sentiment" method="get">
+    	<label for="hashtag">Search for any topic:</label>
+    	<input type="text" name="hashtag" placeholder="Eg. worldcup, rubyconf">
+    	<input type="submit" value="Go">
+    </form>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+{
+  "name": "twitter-analysis",
+  "version": "0.0.0",
+  "description": "Sentiment Analysis of the Twitter Live Stream",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/panchdevs/twitter-analysis.git"
+  },
+  "author": "PanchDevs",
+  "bugs": {
+    "url": "https://github.com/panchdevs/twitter-analysis/issues"
+  },
+  "homepage": "http://panchdevs.github.io",
+  "dependencies": {
+    "body-parser": "~1.8.1",
+    "cookie-parser": "~1.3.3",
+    "debug": "~2.0.0",
+    "dotenv": "^1.1.0",
+    "ejs": "~0.8.5",
+    "express": "~4.9.0",
+    "morgan": "~1.3.0",
+    "serve-favicon": "~2.1.3",
+    "socket.io": "^1.3.5"
+  }
+}
