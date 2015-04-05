@@ -25,7 +25,6 @@ def process_tweet(tweet):
     return tweet
 
 
-# Function to process emoticons
 def process_emoticons(tweet):
     POS1 = ["(:", "(-:", ":)", ":-)", ":-]", ":]", ":-P", ":P", ":p", ":-p", \
             ":3", ":>", "=]", "8)", "=)"]
