@@ -25,9 +25,6 @@ class TweetListener(StreamListener):
         # collect more tweets
         return not self.limit_reached()
 
-    def on_error(self, status):
-        print(status, "An error occured.")
-
     def limit_reached(self):
         if self.limit is None:
             return False
