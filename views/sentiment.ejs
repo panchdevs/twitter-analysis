@@ -10,11 +10,23 @@
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
     <p>You searched for <%= hashtag %></p>
+    <p>No. of positive tweets: <span id="no-pos">0</span></p>
+    <p>No. of negative tweets: <span id="no-neg">0</span></p>
     <script type="text/javascript">
     $(function() {
+      var posCount = 0;
+      var negCount = 0;
+
       var socket = io.connect('http://localhost:8080');
       socket.on('data', function (data) {
-        console.log(data);
+        for (var i = 0; i < data.d.length; i++) {
+          if(data.d.charAt(i) === '1')
+            posCount++;
+          else if (data.d.charAt(i) === '0')
+            negCount++;
+        }
+        $('#no-pos').text(posCount);
+        $('#no-neg').text(negCount);
       });
     });
     </script>
