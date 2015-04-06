@@ -54,35 +54,41 @@ app.use(function(err, req, res, next) {
     });
 });
 
-var server = app.listen(8080, function() {
-  console.log('Express started on port ' + 8080);
-});
-var io = require('socket.io')(server);
-
-router.get('/', function(req, res) {
-    res.render('index', { title: 'Twitter Sentiment Analysis' });
+// Train classifer on dataset and then start the server
+spawn('python', ['train_classifier.py']).on('close', function (code) {
+    console.log('Classifier trained! Process exit code ' + code);
+    serve();
 });
 
-router.get('/sentiment', function(req, res) {
-    var proc = spawn('python', ['-u', 'twitter-analysis.py'], { env: process.env });
-
-    proc.stdout.setEncoding('utf8');
-
-    proc.stdout.on('data', function (data) {
-        var str = data.toString()
-        var lines = str.split(/(\r?\n)/g);
-        io.emit('data', {d : lines.join("")});
-        console.log(lines.join(""));
+function serve() {
+    var server = app.listen(8080, function() {
+      console.log('Express started on port ' + 8080);
     });
 
-    proc.on('close', function (code) {
-        console.log('process exit code ' + code);
+    var io = require('socket.io')(server);
+
+    router.get('/', function(req, res) {
+        res.render('index', { title: 'Twitter Sentiment Analysis' });
     });
 
-    res.render('sentiment', {
-        title: 'Twitter Sentiment Analysis',
-        hashtag: req.query.hashtag
+    router.get('/sentiment', function(req, res) {
+        var proc = spawn('python', ['-u', 'classify.py', req.query.hashtag], { env: process.env });
+        
+        proc.stdout.setEncoding('utf8');
+        proc.stdout.on('data', function(data) {
+            io.emit('data', { d: data.split("\n").join("") });
+        });
+
+        proc.on('close', function (code) {
+            console.log('process exit code ' + code);
+        });
+
+        res.render('sentiment', {
+            title: 'Twitter Sentiment Analysis',
+            hashtag: req.query.hashtag
+        });
     });
-});
+
+}
 
 module.exports = app;
