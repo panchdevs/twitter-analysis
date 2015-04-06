@@ -1,2 +1,5 @@
 __pycache__/
 *.swp
+npm-debug.log
+node_modules/
+data/classifier.pkl*
