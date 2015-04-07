@@ -72,11 +72,16 @@ function serve() {
     });
 
     router.get('/sentiment', function(req, res) {
-        var proc = spawn('python', ['-u', 'classify.py', req.query.hashtag], { env: process.env });
+        var proc = spawn('python', ['-u', 'classify.py', req.query.hashtag, req.query.limit], { env: process.env });
         
         proc.stdout.setEncoding('utf8');
         proc.stdout.on('data', function(data) {
-            io.emit('data', { d: data.split("\n").join("") });
+            tweet = data.split("<-||->")[0];
+            label = data.split("<-||->")[1];
+            io.emit('data', { text: tweet, polarity: label });
+        });
+        proc.stderr.on('data', function(data) {
+            console.log(data.toString());
         });
 
         proc.on('close', function (code) {
@@ -85,7 +90,8 @@ function serve() {
 
         res.render('sentiment', {
             title: 'Twitter Sentiment Analysis',
-            hashtag: req.query.hashtag
+            hashtag: req.query.hashtag,
+            limit: req.query.limit
         });
     });
 
