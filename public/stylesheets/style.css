@@ -6,3 +6,17 @@ body {
 a {
   color: #00B7FF;
 }
+
+#tweetbox {
+  height: 300px;
+  width: 100%;
+  overflow: scroll;	
+}
+
+.pos-tweet {
+  background-color: #22FF22
+}
+
+.neg-tweet {
+  background-color: #FF2222
+}

@@ -1,23 +1,24 @@
+from sklearn import svm
 from tweepy.streaming import StreamListener
 from tweetcleaner import process_tweet
 from tweet_sentiment import *
 
 class TweetListener(StreamListener):
-    def __init__(self, limit=None, api=None):
+    def __init__(self, classifier, limit=None, api=None):
         super(TweetListener, self).__init__()
         self.count = 0
         self.limit = limit
-        
+        self.classifier = classifier
 
     def on_status(self, tweet):
         cleantweet = process_tweet(tweet._json['text'])
         score = calculate_sentiment_score(cleantweet)
         no_of_pos, no_of_neg = calculate_emoticon_score(cleantweet)
-        if score > 0 :
-            print "1"
-	else :
-            print "0"
-        
+
+        polarity = self.classifier.predict([score, no_of_neg, no_of_pos])
+
+        print(tweet._json['text'], polarity[0], sep="<-||->")
+
         self.count += 1
 
         # If limit is reached return False to stop collecting tweets

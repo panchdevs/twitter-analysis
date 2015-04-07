@@ -9,24 +9,28 @@
   <body>
     <h1><%= title %></h1>
     <p>Welcome to <%= title %></p>
-    <p>You searched for <%= hashtag %></p>
+    <p>Classifying <%= limit %> tweets about <%= hashtag %>...</p>
     <p>No. of positive tweets: <span id="no-pos">0</span></p>
     <p>No. of negative tweets: <span id="no-neg">0</span></p>
+    <div id="tweetbox">
+    </div>
     <script type="text/javascript">
     $(function() {
       var posCount = 0;
       var negCount = 0;
-
       var socket = io.connect('http://localhost:8080');
       socket.on('data', function (data) {
-        for (var i = 0; i < data.d.length; i++) {
-          if(data.d.charAt(i) === '1')
-            posCount++;
-          else if (data.d.charAt(i) === '0')
-            negCount++;
+        if(data.polarity == 1) {
+          posCount++;
+          var tweetClass = "pos-tweet";
+        }
+        else if (data.polarity == 0) {
+          negCount++;
+          var tweetClass = "neg-tweet";
         }
         $('#no-pos').text(posCount);
         $('#no-neg').text(negCount);
+        $('#tweetbox').append('<p class="' + tweetClass + '">' + data.text + '</p>');
       });
     });
     </script>
