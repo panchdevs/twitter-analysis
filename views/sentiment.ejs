@@ -8,10 +8,14 @@
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
     <p>Classifying <%= limit %> tweets about <%= hashtag %>...</p>
     <p>No. of positive tweets: <span id="no-pos">0</span></p>
     <p>No. of negative tweets: <span id="no-neg">0</span></p>
+    <p>Accuracy: <span id="accuracy"></span></p>
+    <p>
+      Tick the checkbox on all correctly labelled tweets to check accuracy
+      <input type="button" value="Finished labelling" id="done">
+    </p>
     <div id="tweetbox">
     </div>
     <script type="text/javascript">
@@ -24,13 +28,30 @@
           posCount++;
           var tweetClass = "pos-tweet";
         }
-        else if (data.polarity == 0) {
+        else if(data.polarity == 0) {
           negCount++;
           var tweetClass = "neg-tweet";
         }
         $('#no-pos').text(posCount);
         $('#no-neg').text(negCount);
-        $('#tweetbox').append('<p class="' + tweetClass + '">' + data.text + '</p>');
+        $('#tweetbox').append('<p> \
+          <span class="' + tweetClass + '">' + data.text + '</span> \
+          <input type="checkbox" name="' + tweetClass + '"> \
+          </p>');
+        $('#done').click(function() {
+          var checkboxes = $('input:checkbox');
+          var count = 0;
+          var total = <%= limit %>;
+          for (var i = 0; i < checkboxes.length; i++) {
+            if((checkboxes[i].checked == true) && (checkboxes[i].name == 'pos-tweet')) {
+              count++;
+            }
+            else if((checkboxes[i].checked == false) && (checkboxes[i].name == 'neg-tweet')) {
+              count++;
+            }
+          }
+          $('#accuracy').text(100 * count / total + "%");
+        });
       });
     });
     </script>
