@@ -3,9 +3,8 @@ Sentiment Analysis of the Twitter Live Stream
 
 Requirements
 ------------
-* mongodb
+* node.js
 * python 3
-* pymongo
 * tweepy
 
 Environment Setup
@@ -14,9 +13,11 @@ Environment Setup
 2. Clone this repository  
 `git clone https://github.com/panchdevs/twitter-analysis.git`
 3. Get your api keys from Twitter ([HOWTO](http://www.74by2.com/2014/06/easily-get-twitter-api-key-api-secret-access-token-access-secret-pictures/))
-4. Enter your keys in `tweet_collector.py` and edit the mongodb server host and port if required
+4. Enter your keys in the `.env` file
+5. Install all the dependencies of the webapp with the following command  
+`npm install`
 
 How to run
 ----------
-Simply run the `tweet_collector.py` script to store tweets in the database.  
-`python tweet_collector.py`
+Simply run the following command to start the server on [127.0.0.1:8080](http://127.0.0.1:8080)  
+`npm start`
