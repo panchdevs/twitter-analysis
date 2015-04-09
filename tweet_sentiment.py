@@ -5,12 +5,6 @@ def get_features(tweet):
     pos_emoticon, neg_emoticon = calculate_emoticon_score(tweet)
     return [sentiment_score, pos_words, neg_words, pos_emoticon, neg_emoticon]
 
-def checkscore(points):
-    if points < 0 :
-        return -1
-    elif points > 0:
-        return 1
-
 def calculate_sentiment_score(tweet):
     d = {}
     fl = open("words.txt", 'r')
@@ -28,47 +22,47 @@ def calculate_sentiment_score(tweet):
         if i == l-1:
             if lst[i] in d:
                 score += d[lst[i]]
-                if checkscore(d[lst[i]]<0):
+                if d[lst[i]] < 0:
                     neg += 1
-                else:
+                elif d[lst[i]] > 0:
                     pos += 1
         elif i == l-2:
             str2 = lst[i] + ' ' + lst[i+1]
             if str2 in d:
                 score += d[str2]
-                if checkscore(d[str2]<0):
+                if d[str2] < 0:
                     neg += 1
-                else:
+                elif d[str2] > 0:
                     pos += 1
                 i += 1
             elif lst[i] in d:
                 score += d[lst[i]]
-                if checkscore(d[lst[i]]<0):
+                if d[lst[i]] < 0:
                     neg += 1
-                else:
+                elif d[lst[i]] > 0:
                     pos += 1
         else:
             str3 = lst[i] + ' ' + lst[i+1] + ' ' + lst[i+2]
             str2 = lst[i] + ' ' + lst[i+1]
             if str3 in d:
                 score += d[str3]
-                if checkscore(d[str3]<0):
+                if d[str3] < 0:
                     neg += 1
-                else:
+                elif d[str3] > 0:
                     pos += 1
                 i += 2
             elif str2 in d:
                 score += d[str2]
-                if checkscore(d[str2]<0):
+                if d[str2] < 0:
                     neg += 1
-                else:
+                elif d[str2] > 0:
                     pos += 1
                 i += 1
             elif lst[i] in d:
                 score += d[lst[i]]
-                if checkscore(d[lst[i]]<0):
+                if d[lst[i]] < 0:
                     neg += 1
-                else:
+                elif d[lst[i]] > 0:
                     pos += 1
         i += 1
     return (score,neg,pos)
