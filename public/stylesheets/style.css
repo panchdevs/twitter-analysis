@@ -1,22 +1,26 @@
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	padding: 50px;
+	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
-  color: #00B7FF;
+	color: #00B7FF;
 }
 
 #tweetbox {
-  height: 300px;
-  width: 100%;
-  overflow: scroll;	
+	height: 300px;
+	width: 100%;
+	overflow: scroll;	
 }
 
 .pos-tweet {
-  background-color: #22FF22
+	background-color: #22FF22
 }
 
 .neg-tweet {
-  background-color: #FF2222
+	background-color: #FF2222
+}
+
+input[type="checkbox"], input[type="button"] {
+	float: right;
 }
