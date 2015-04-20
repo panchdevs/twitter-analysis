@@ -12,10 +12,8 @@ class TweetListener(StreamListener):
 
     def on_status(self, tweet):
         cleantweet = process_tweet(tweet._json['text'])
-        score = calculate_sentiment_score(cleantweet)
-        no_of_pos, no_of_neg = calculate_emoticon_score(cleantweet)
-
-        polarity = self.classifier.predict([score, no_of_neg, no_of_pos])
+        tweet_features = get_features(cleantweet)
+        polarity = self.classifier.predict(tweet_features)
 
         print(tweet._json['text'], polarity[0], sep="<-||->")
 
@@ -33,4 +31,3 @@ class TweetListener(StreamListener):
             return True
         else:
             return False
-

@@ -13,6 +13,10 @@ a {
 	overflow: scroll;	
 }
 
+#tweetbox span {
+	padding: 5px;
+}
+
 .pos-tweet {
 	background-color: #22FF22
 }
@@ -23,4 +27,8 @@ a {
 
 input[type="checkbox"], input[type="button"] {
 	float: right;
+}
+
+#classify {
+	float: initial;
 }

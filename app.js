@@ -55,12 +55,13 @@ app.use(function(err, req, res, next) {
 });
 
 // Train classifer on dataset and then start the server
-spawn('python', ['train_classifier.py']).on('close', function (code) {
+spawn('python', ['lib/train_classifier.py']).on('close', function (code) {
     console.log('Classifier trained! Process exit code ' + code);
     serve();
 });
 
 function serve() {
+
     var server = app.listen(8080, function() {
       console.log('Express started on port ' + 8080);
     });
@@ -71,27 +72,43 @@ function serve() {
         res.render('index', { title: 'Twitter Sentiment Analysis' });
     });
 
-    router.get('/sentiment', function(req, res) {
-        var proc = spawn('python', ['-u', 'classify.py', req.query.hashtag, req.query.limit], { env: process.env });
-        
-        proc.stdout.setEncoding('utf8');
-        proc.stdout.on('data', function(data) {
-            tweet = data.split("<-||->")[0];
-            label = data.split("<-||->")[1];
-            io.emit('data', { text: tweet, polarity: label });
-        });
-        proc.stderr.on('data', function(data) {
-            console.log(data.toString());
+    var connections = {};
+
+    io.on('connection', function(socket) {
+
+        socket.on('classify', function(data) {
+
+            if (socket.id in connections) {
+                connections[socket.id].kill();
+            }
+
+            var proc = spawn('python',
+                ['-u', 'lib/classify.py', data.hashtag, data.limit],
+                { env: process.env });
+            
+            proc.stdout.setEncoding('utf8');
+            proc.stdout.on('data', function(outdata) {
+                tweet = outdata.split("<-||->")[0];
+                label = outdata.split("<-||->")[1];
+                socket.emit('data', {
+                    hashtag: data.hashtag,
+                    text: tweet,
+                    polarity: label
+                });
+            });
+            proc.stderr.on('data', function(errdata) {
+                console.log(errdata.toString());
+            });
+
+            proc.on('close', function(code) {
+                console.log('process exit code ' + code);
+            });
+
+            connections[socket.id] = proc;
         });
 
-        proc.on('close', function (code) {
-            console.log('process exit code ' + code);
-        });
-
-        res.render('sentiment', {
-            title: 'Twitter Sentiment Analysis',
-            hashtag: req.query.hashtag,
-            limit: req.query.limit
+        socket.on('disconnect', function() {
+            delete connections[socket.id];
         });
     });
 

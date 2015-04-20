@@ -7,7 +7,7 @@ def get_features(tweet):
 
 def calculate_sentiment_score(tweet):
     d = {}
-    fl = open("words.txt", 'r')
+    fl = open("data/words.txt", 'r')
     for line in fl:
         word, score = line.split("\t")
         d[word] = int(score)
@@ -65,7 +65,7 @@ def calculate_sentiment_score(tweet):
                 elif d[lst[i]] > 0:
                     pos += 1
         i += 1
-    return (score,neg,pos)
+    return (score, neg, pos)
 
 def calculate_emoticon_score(tweet):
     no_of_pos = len(re.findall("positive\d emoticon", tweet))

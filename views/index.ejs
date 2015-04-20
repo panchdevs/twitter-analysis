@@ -3,15 +3,85 @@
   <head>
     <title><%= title %></title>
     <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="javascripts/jquery.min.js"></script>
   </head>
   <body>
     <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-    <form action="/sentiment" method="get">
-      <label for="hashtag">Search for any topic:</label>
-      <input type="text" name="hashtag" placeholder="Eg. worldcup, rubyconf">
-      <input type="number" name="limit" value="100">
-      <input type="submit" value="Go">
-    </form>
+    <p>
+      Classify 
+      <input type="number" id="limit" value="100"> 
+      tweets about 
+      <input type="text" id="hashtag" placeholder="Eg. worldcup, rubyconf">
+      <input type="button" value="Go" id="classify">
+    </p>
+    <div id="classification">
+      <p>No. of positive tweets: <span id="no-pos">0</span></p>
+      <p>No. of negative tweets: <span id="no-neg">0</span></p>
+      <p>Accuracy: <span id="accuracy"></span></p>
+      <p>
+        Tick the checkbox on all correctly labelled tweets to check accuracy
+        <input type="button" value="Finished labelling" id="done">
+      </p>
+      <div id="tweetbox">
+      </div>
+    </div>
+    <script type="text/javascript">
+    $(function() {
+      var socket = io.connect('http://localhost:8080');
+      
+      var posCount = 0;
+      var negCount = 0;
+      var hashtag = $('#hashtag').val();
+      $('#classification').hide();
+
+      socket.on('data', function (data) {
+
+        if (hashtag != data.hashtag) return;
+
+        if(data.polarity == 1) {
+          posCount++;
+          var tweetClass = "pos-tweet";
+        }
+        else if(data.polarity == 0) {
+          negCount++;
+          var tweetClass = "neg-tweet";
+        }
+        $('#no-pos').text(posCount);
+        $('#no-neg').text(negCount);
+        $('#tweetbox').append('<p> \
+          <span class="' + tweetClass + '">' + data.text + '</span> \
+          <input type="checkbox" name="' + tweetClass + '"> \
+          </p>');
+      });
+
+      $('#classify').click(function() {
+        $('#classification').show();
+        var limit = $('#limit').val();
+        hashtag = $('#hashtag').val();
+        posCount = 0;
+        negCount = 0;
+        $('#no-pos').text(posCount);
+        $('#no-neg').text(negCount);
+        $('#accuracy').text('');
+        $('#tweetbox').empty();
+        socket.emit('classify', { hashtag: hashtag, limit: limit});
+      });
+
+      $('#done').click(function() {
+        var checkboxes = $('input:checkbox');
+        var count = 0;
+        var total = checkboxes.length;
+        for (var i = 0; i < checkboxes.length; i++) {
+          if(checkboxes[i].checked == true) {
+            count++;
+          }
+        }
+        var accuracy = Math.round(10000 * count / total) / 100;
+        $('#accuracy').text(accuracy + "%");
+      });
+
+    });
+    </script>
   </body>
 </html>
