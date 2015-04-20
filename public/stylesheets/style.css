@@ -13,6 +13,10 @@ a {
 	overflow: scroll;	
 }
 
+#tweetbox span {
+	padding: 5px;
+}
+
 .pos-tweet {
 	background-color: #22FF22
 }

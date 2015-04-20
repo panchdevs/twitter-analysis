@@ -31,4 +31,3 @@ class TweetListener(StreamListener):
             return True
         else:
             return False
-

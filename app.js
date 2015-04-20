@@ -55,7 +55,7 @@ app.use(function(err, req, res, next) {
 });
 
 // Train classifer on dataset and then start the server
-spawn('python', ['train_classifier.py']).on('close', function (code) {
+spawn('python', ['lib/train_classifier.py']).on('close', function (code) {
     console.log('Classifier trained! Process exit code ' + code);
     serve();
 });
@@ -83,7 +83,7 @@ function serve() {
             }
 
             var proc = spawn('python',
-                ['-u', 'classify.py', data.hashtag, data.limit],
+                ['-u', 'lib/classify.py', data.hashtag, data.limit],
                 { env: process.env });
             
             proc.stdout.setEncoding('utf8');
