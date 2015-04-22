@@ -9,7 +9,7 @@ def get_features(tweet):
 def calculate_sentiment_score(tweet):
     pos={'PRP':1,'NN':1,'DT':2,'VBP':3,'JJ':4}
     d = {}
-    with open("../data/words.txt", 'r') as fl:
+    with open("data/words.txt", 'r') as fl:
         for line in fl:
             word, score = line.split("\t")
             d[word] = float(score)
