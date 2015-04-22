@@ -1,0 +1,92 @@
+import re
+import nltk
+pos={'PRP':1,'NN':1,'DT':2,'VBP':3,'JJ':4}
+def get_features(tweet):
+    sentiment_score, neg_words, pos_words = calculate_sentiment_score(tweet)
+    pos_emoticon, neg_emoticon = calculate_emoticon_score(tweet)
+    return [sentiment_score, pos_words, neg_words, pos_emoticon, neg_emoticon]
+
+def calculate_sentiment_score(tweet):
+<<<<<<< HEAD
+    d = {}
+    fl = open("data/words.txt", 'r')
+    for line in fl:
+        word, score = line.split("\t")
+        d[word] = float(score)
+    fl.close()
+    #lst = tweet.split(' ')
+    lst=nltk.word_tokenize(tweet)
+    tokens=nltk.pos_tag(lst)
+    score = 0
+    i = 0
+    l = len(tokens)
+    pos = 0
+    neg = 0
+    while i < l:
+        if(tokens[i][0] in d and tokens[i][1] in pos):
+            score += d[tokens[i][0]]*pos[tokens[i][1]]
+        elif (tokens[i][0] in d):
+            score += d[tokens[i][0]]
+        if(d[tokens[i][0]] < 5):
+            neg += 1
+        else:
+            pos += 1
+        i += 1
+    return (score, neg, pos)
+=======
+	d = {}
+	fl = open("data/words.txt", 'r')
+	for line in fl:
+		word, score = line.split("\t")
+		d[word] = int(score)
+	fl.close()
+	#lst = tweet.split(' ')
+	lst=nltk.word_tokenize(tweet)
+	tokens=nltk.pos_tag(lst)
+	score = 0
+	i = 0
+	l = len(tokens)
+	while i < l:
+		if i == l-1:
+			if (tokens[i][0] in d and tokens[i][1] in pos):
+				score += d[tokens[i][0]]*pos[tokens[i][1]]
+			elif (tokens[i][0] in d):
+				score += d[tokens[i][0]]
+		elif i == l-2:
+			str2 = tokens[i][0] + ' ' + tokens[i+1][0]
+			if (str2 in d and tokens[i][1] in pos and tokens[i+1][1] in pos):
+				score += d[str2]*(pos[tokens[i][1]]*pos[tokens[i+1][1]])
+				i += 1
+			elif (tokens[i][0] in d and tokens[i][1] in pos):
+				score += d[tokens[i][0]]*pos[tokens[i][1]]
+
+		else:
+			str3 = tokens[i][0] + ' ' + tokens[i+1][0] + ' ' + tokens[i+2][0]
+			str2 = tokens[i][0] + ' ' + tokens[i+1][0]
+			if str3 in d:
+				if(tokens[i][1] in pos and tokens[i+1][1] in pos and tokens[i+2][1] in pos):
+					score += d[str3]*(pos[tokens[i][1]]+pos[tokens[i+1][1]]+pos[tokens[i+2][1]])
+				else:
+					score += d[str3]
+				i += 2
+			elif str2 in d:
+				if(tokens[i][1] in pos and tokens[i+1][1] in pos):
+					score += d[str2]*(pos[tokens[i][1]]+pos[tokens[i+1][1]])
+				else:
+					score += d[str2]
+				i += 1
+			elif tokens[i][0] in d:
+				if(tokens[i][1] in pos):
+					score += d[tokens[i][0]]*pos[tokens[i][1]]
+				else:
+					score += d[tokens[i][0]]
+				
+
+		i += 1
+	return score
+>>>>>>> f97fa23d28dcde6fc26a743d093f46f288d8138b
+
+def calculate_emoticon_score(tweet):
+    no_of_pos = len(re.findall("positive\d emoticon", tweet))
+    no_of_neg = len(re.findall("negative\d emoticon", tweet))
+    return (no_of_pos, no_of_neg)
