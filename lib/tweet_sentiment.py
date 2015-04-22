@@ -10,7 +10,7 @@ def calculate_sentiment_score(tweet):
     fl = open("data/words.txt", 'r')
     for line in fl:
         word, score = line.split("\t")
-        d[word] = int(score)
+        d[word] = float(score)
     fl.close()
     lst = tweet.split(' ')
     score = 0
@@ -19,51 +19,12 @@ def calculate_sentiment_score(tweet):
     pos = 0
     neg = 0
     while i < l:
-        if i == l-1:
-            if lst[i] in d:
-                score += d[lst[i]]
-                if d[lst[i]] < 0:
-                    neg += 1
-                elif d[lst[i]] > 0:
-                    pos += 1
-        elif i == l-2:
-            str2 = lst[i] + ' ' + lst[i+1]
-            if str2 in d:
-                score += d[str2]
-                if d[str2] < 0:
-                    neg += 1
-                elif d[str2] > 0:
-                    pos += 1
-                i += 1
-            elif lst[i] in d:
-                score += d[lst[i]]
-                if d[lst[i]] < 0:
-                    neg += 1
-                elif d[lst[i]] > 0:
-                    pos += 1
-        else:
-            str3 = lst[i] + ' ' + lst[i+1] + ' ' + lst[i+2]
-            str2 = lst[i] + ' ' + lst[i+1]
-            if str3 in d:
-                score += d[str3]
-                if d[str3] < 0:
-                    neg += 1
-                elif d[str3] > 0:
-                    pos += 1
-                i += 2
-            elif str2 in d:
-                score += d[str2]
-                if d[str2] < 0:
-                    neg += 1
-                elif d[str2] > 0:
-                    pos += 1
-                i += 1
-            elif lst[i] in d:
-                score += d[lst[i]]
-                if d[lst[i]] < 0:
-                    neg += 1
-                elif d[lst[i]] > 0:
-                    pos += 1
+        if lst[i] in d:
+            score += d[lst[i]]
+            if d[lst[i]] < 5:
+                neg += 1
+            else:
+                pos += 1
         i += 1
     return (score, neg, pos)
 
